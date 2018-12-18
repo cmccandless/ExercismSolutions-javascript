@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash -e
 
 exercise="$1"
 echo "init $exercise"
