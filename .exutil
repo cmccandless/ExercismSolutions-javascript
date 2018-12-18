@@ -1,4 +1,4 @@
 {
   "track": "javascript",
-  "init_script": "./init.sh {exercise}"
+  "init_script": "./init.sh"
 }

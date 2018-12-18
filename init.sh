@@ -1,8 +1,12 @@
 #!/bin/bash -e
+# Run in exercise directory by exutil
 
-exercise="$1"
-echo "init $exercise"
-cd "$exercise"
+exercise="$(basename $(pwd))"
+# if [ -z "$exercise" ]; then
+#     echo 'Error: must provide exercise'
+#     exit 1
+# fi
+echo 'npm install'
 npm install
+echo "Creating $exercise.js..."
 touch "$exercise.js"
-cd -
