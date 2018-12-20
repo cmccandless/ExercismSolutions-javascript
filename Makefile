@@ -2,7 +2,7 @@
 all: lint test-all
 
 lint:
-	@echo "No linter configured"
+	@ls ./*/*.js | xargs -n1 | grep -v _test | xargs eslint --config .eslintrc.json
 
 test:
 	@ $(foreach FILE,$(FILES), \
@@ -16,6 +16,6 @@ test-all:
 
 define dotest
 	cd $(1); \
-	npm run $(OPTS) test 2>&1 || exit 1; \
+	if [ -f .solution.json ]; then npm run $(OPTS) test 2>&1 || exit 1; fi; \
 	cd ..;
 endef

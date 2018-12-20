@@ -8,5 +8,6 @@ exercise="$(basename $(pwd))"
 # fi
 echo 'npm install'
 npm install
+eslint --init
 echo "Creating $exercise.js..."
 touch "$exercise.js"
