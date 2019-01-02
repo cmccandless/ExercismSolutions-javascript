@@ -46,7 +46,6 @@ export class ComputeCell extends Cell {
     callback.dependency = this;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   removeCallback(callback) {
     callback.dependency = null;
   }
