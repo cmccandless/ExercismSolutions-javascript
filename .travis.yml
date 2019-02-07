@@ -2,11 +2,13 @@
 ---
 language: node_js
 node_js:
-- 'node'
+  - 'node'
 sudo: false
 before_install:
-- npm i -g npm@latest
+  - npm i -g npm@latest
 install:
-- npm ci
+  - npm ci
+before_script:
+  - make lint
 script:
-- make test-all
+  - make test-all
