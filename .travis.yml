@@ -8,6 +8,7 @@ before_install:
   - npm i -g npm@latest
 install:
   - npm ci
+  - npm install -g babel-eslint
 before_script:
   - make lint
 script:
