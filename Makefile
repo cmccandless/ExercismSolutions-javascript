@@ -16,7 +16,7 @@ $(LINT_TARGETS):
 
 test-all: $(EXERCISES)
 
-$(EXERCISES): %: .build/%
+$(EXERCISES): %: $(OUT_DIR)/%
 
 $(OUT_DIR):
 	@ mkdir -p $@
