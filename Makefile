@@ -1,5 +1,4 @@
 EXTENSION :=js
-# SOURCE_FILES := $(shell find * -type f -name '*.$(EXTENSION)' | grep -v node_modules)
 SOURCE_FILES := $(shell find * -type f -name '*.$(EXTENSION)' | grep -v node_modules)
 EXERCISES := $(shell find * -type f -name '*.$(EXTENSION)' | grep -v node_modules | cut -d/ -f1 | uniq)
 LINT_TARGETS := $(addprefix lint-,$(EXERCISES))
@@ -22,8 +21,8 @@ $(OUT_DIR):
 	@ mkdir -p $@
 
 clean:
-	@ rm -rf $(OUT_DIR)
-	@ rm -rf ./*/node_modules/
+	rm -rf $(OUT_DIR)
+	rm -rf ./*/node_modules/
 
 .SECONDEXPANSION:
 
