@@ -12,4 +12,4 @@ install:
 before_script:
   - make lint
 script:
-  - make test-all
+  - make test
