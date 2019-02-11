@@ -1,4 +1,5 @@
 {
   "track": "javascript",
-  "init_script": "./init.sh"
+  "init_script": "./init.sh",
+  "non_exercises": ["node_modules", "lib", "bin"]
 }

@@ -11,6 +11,8 @@ LINT_FIX_OBJECTS:=$(addprefix $(OUT_DIR)/,$(LINT_FIX_TARGETS))
 .PHONY: lint test lint-fix
 all: lint test
 
+no-skip:
+	@ ! grep --exclude-dir='node_modules' --include='*.js' -rE 'xtest' .
 lint: $(LINT_TARGETS)
 lint-fix: $(LINT_FIX_TARGETS)
 test: $(EXERCISES)
