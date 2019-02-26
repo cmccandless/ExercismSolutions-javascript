@@ -1,6 +1,6 @@
 EXTENSION :=js
-SOURCE_FILES := $(shell find * -type f -name '*.$(EXTENSION)' | grep -v node_modules)
-EXERCISES := $(shell find * -type f -name '*.$(EXTENSION)' | grep -v node_modules | cut -d/ -f1 | uniq)
+SOURCE_FILES := $(shell find * -maxdepth 1 -type f -name '*.$(EXTENSION)' | grep -v node_modules)
+EXERCISES := $(shell find * -maxdepth 1 -type f -name '*.$(EXTENSION)' | grep -v node_modules | cut -d/ -f1 | uniq)
 LINT_TARGETS := $(addprefix lint-,$(EXERCISES))
 LINT_FIX_TARGETS := $(addsuffix -fix,$(LINT_TARGETS))
 OUT_DIR=.build
