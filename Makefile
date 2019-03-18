@@ -38,12 +38,12 @@ GET_DEP_LINT = $(filter $(patsubst $(OUT_DIR)/lint-%,%,$@)%,$(SOURCE_FILES))
 $(LINT_OBJECTS): $$(GET_DEP_LINT) | $(OUT_DIR)
 	$(eval EXERCISE := $(patsubst $(OUT_DIR)/lint-%,%,$@))
 	@ echo "Linting $(EXERCISE)..."
-	@ eslint --config .eslintrc.json $(EXERCISE)/*.js
+	@ eslint --config .eslintrc.json --ignore-path .eslintignore $(EXERCISE)/*.js
 	@ touch $@
 
 GET_DEP_LINT_FIX = $(filter $(patsubst $(OUT_DIR)/lint-%-fix,%,$@)%,$(SOURCE_FILES))
 $(LINT_FIX_OBJECTS): $$(GET_DEP_LINT_FIX) | $(OUT_DIR)
 	$(eval EXERCISE := $(patsubst $(OUT_DIR)/lint-%-fix,%,$@))
 	@ echo "Lint-fixing $(EXERCISE)..."
-	@ eslint --config .eslintrc.json --fix $(EXERCISE)/*.js
+	@ eslint --config .eslintrc.json  --ignore-path .eslintignore --fix $(EXERCISE)/*.js
 	@ touch $@
