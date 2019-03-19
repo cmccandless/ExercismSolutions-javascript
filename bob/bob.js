@@ -11,10 +11,10 @@ const isYelling = message => (
 const messages = {
   silence: 'Fine. Be that way!',
   0: 'Whatever.',
+  [YELLING_AND_ASKING]: "Calm down, I know what I'm doing!",
+  [YELLING]: 'Whoa, chill out!',
+  [ASKING]: 'Sure.',
 };
-messages[YELLING_AND_ASKING] = "Calm down, I know what I'm doing!";
-messages[YELLING] = 'Whoa, chill out!';
-messages[ASKING] = 'Sure.';
 
 export function hey(message) {
   const cleaned = message.trim();
