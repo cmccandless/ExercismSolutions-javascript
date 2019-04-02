@@ -1,0 +1,52 @@
+"cases": [
+    {
+        "description": "testing for egg allergy"
+        "cases": [
+            {
+                "description": "allergic to nothing",
+                "property": "allergicTo",
+                "input": {
+                "item": "eggs",
+                "score": 0
+                },
+                "expected": false
+            },
+            {
+                "description": "allergic only to eggs",
+                "property": "allergicTo",
+                "input": {
+                "item": "eggs",
+                "score": 1
+                },
+                "expected": true
+            },
+            {
+                "description": "allergic to eggs and something else",
+                "property": "allergicTo",
+                "input": {
+                "item": "eggs",
+                "score": 7
+                },
+                "expected": true
+            },
+            {
+                "description": "allergic something, but not eggs",
+                "property": "allergicTo",
+                "input": {
+                "item": "eggs",
+                "score": 6
+                },
+                "expected": false
+            },
+            {
+                "description": "allergic to everything",
+                "property": "allergicTo",
+                "input": {
+                "item": "eggs",
+                "score": 255
+                },
+                "expected": true
+            }
+        ]
+    }
+]
