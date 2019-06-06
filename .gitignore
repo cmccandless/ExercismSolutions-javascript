@@ -88,3 +88,5 @@ typings/
 share/
 bin/
 .build
+*/package-lock.json
+!./package-lock.json
