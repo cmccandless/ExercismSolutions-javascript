@@ -1,4 +1,4 @@
-const nums = [...Array(8).keys()];
+const oneToEight = [...Array(8).keys()];
 
 // eslint-disable-next-line no-extend-native
 Array.prototype.equals = function arrayEquals(other) {
@@ -7,16 +7,16 @@ Array.prototype.equals = function arrayEquals(other) {
 };
 
 class Queens {
-  constructor(pos = {}) {
-    this.white = pos.white || [0, 3];
-    this.black = pos.black || [7, 3];
+  constructor(pos = { white: [0, 3], black: [7, 3] }) {
+    this.white = pos.white;
+    this.black = pos.black;
     if (this.white.equals(this.black)) {
       throw new Error('Queens cannot share the same space');
     }
   }
 
   toString() {
-    const str = nums.map(r => nums.map((c) => {
+    const str = oneToEight.map(r => oneToEight.map((c) => {
       if (this.white.equals([r, c])) return 'W';
       if (this.black.equals([r, c])) return 'B';
       return '_';
@@ -24,10 +24,21 @@ class Queens {
     return `${str}\n`;
   }
 
+  sameRow() {
+    return this.white[0] === this.black[0];
+  }
+
+  sameColumn() {
+    return this.white[1] === this.black[1];
+  }
+
+  sameDiagonal() {
+    return Math.abs(this.white[0] - this.black[0])
+      === Math.abs(this.white[1] - this.black[1]);
+  }
+
   canAttack() {
-    const dR = this.white[0] - this.black[0];
-    const dC = this.white[1] - this.black[1];
-    return dR === 0 || dC === 0 || Math.abs(dR) === Math.abs(dC);
+    return this.sameRow() || this.sameColumn() || this.sameDiagonal();
   }
 }
 
