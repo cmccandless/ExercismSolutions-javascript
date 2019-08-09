@@ -1,4 +1,4 @@
-const oneToEight = [...Array(8).keys()];
+const boardRange = [...Array(8).keys()];
 
 // eslint-disable-next-line no-extend-native
 Array.prototype.equals = function arrayEquals(other) {
@@ -16,12 +16,12 @@ class Queens {
   }
 
   toString() {
-    const str = oneToEight.map(r => oneToEight.map((c) => {
+    const board = boardRange.map(r => boardRange.map((c) => {
       if (this.white.equals([r, c])) return 'W';
       if (this.black.equals([r, c])) return 'B';
       return '_';
     }).join(' ')).join('\n');
-    return `${str}\n`;
+    return `${board}\n`;
   }
 
   sameRow() {
