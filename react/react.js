@@ -1,39 +1,27 @@
-class Cell {
+export class Cell {
   constructor(value) {
     this.value = value;
     this.dependents = new Set();
   }
 
-  registerDependent(dependent) {
-    this.dependents.add(dependent);
+  registerDependent(cell) {
+    this.dependents.add(cell);
+  }
+
+  update() {
+    this.dependents.forEach(d => d.update());
+  }
+
+  updateFinished() {
+    this.dependents.forEach(d => d.updateFinished());
   }
 }
 
 export class InputCell extends Cell {
   setValue(value) {
     this.value = value;
-
-    // Performs a breadth-first traversal of cell dependency tree,
-    // pruning unchanged branches
-    const cellsToUpdate = Array.from(this.dependents);
-    const modifiedCells = new Map();
-    while (cellsToUpdate.length !== 0) {
-      const cell = cellsToUpdate.shift();
-      const snapshot = cell.value;
-      cell.update();
-      // If cell value hasn't changed, prune branch
-      if (snapshot !== cell.value) {
-        if (!modifiedCells.has(cell)) {
-          modifiedCells.set(cell, snapshot);
-          cellsToUpdate.push(...cell.dependents);
-        }
-      }
-    }
-    modifiedCells.forEach((snapshot, cell) => {
-      if (snapshot !== cell.value) {
-        cell.fireCallbacks();
-      }
-    });
+    this.update();
+    this.updateFinished();
   }
 }
 
@@ -41,17 +29,24 @@ export class ComputeCell extends Cell {
   constructor(inputs, fn) {
     super(fn(inputs));
     this.inputs = inputs;
-    inputs.forEach(i => i.registerDependent(this));
     this.fn = fn;
     this.callbacks = new Set();
-  }
+    this.snapshot = this.value;
 
-  calculate() {
-    return this.fn(this.inputs);
+    inputs.forEach(i => i.registerDependent(this));
   }
 
   update() {
-    this.value = this.calculate();
+    this.value = this.fn(this.inputs);
+    super.update();
+  }
+
+  updateFinished() {
+    if (this.snapshot !== this.value) {
+      this.callbacks.forEach(cb => cb.call(this));
+      this.snapshot = this.value;
+    }
+    super.updateFinished();
   }
 
   addCallback(cb) {
@@ -60,10 +55,6 @@ export class ComputeCell extends Cell {
 
   removeCallback(cb) {
     this.callbacks.delete(cb);
-  }
-
-  fireCallbacks() {
-    this.callbacks.forEach(cb => cb.call(this));
   }
 }
 
