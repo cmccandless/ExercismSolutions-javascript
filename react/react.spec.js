@@ -207,4 +207,21 @@ describe('React module', () => {
 
     expect(callback.values).toEqual([]);
   });
+
+  test('compute cells fire callbacks', () => {
+    const inputCell = new InputCell(1);
+    const output = new ComputeCell(
+      [inputCell],
+      inputs => inputs[0].value + 1,
+    );
+
+    const callback = new CallbackCell(cell => "BOOGER");
+    output.addCallback(callback);
+
+    inputCell.setValue(3);
+    inputCell.setValue(4);
+    inputCell.setValue(5);
+    inputCell.setValue(6);
+    expect(callback.values).toEqual(["BOOGER","BOOGER","BOOGER","BOOGER"]);
+  });
 });

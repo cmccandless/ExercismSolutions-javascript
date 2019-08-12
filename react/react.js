@@ -1,27 +1,42 @@
 /* eslint-disable no-param-reassign */
-const callbacks = [];
-
+// let cellInstanceCount = 0;
 
 class Cell {
   constructor(value) {
     this.value = value;
     this.dependents = new Set();
+    // this.id = cellInstanceCount;
+    // cellInstanceCount += 1;
   }
 
-  update() {
-    this.dependents.forEach(d => d.compute());
+  registerDependent(dependent) {
+    this.dependents.add(dependent);
   }
 }
 
 export class InputCell extends Cell {
   setValue(value) {
     this.value = value;
-    const callbackOldValues = callbacks.map(cb => cb.getValue());
-    this.update();
-    callbacks.forEach((cb, i) => {
-      const newValue = cb.getValue();
-      if (newValue !== callbackOldValues[i]) {
-        cb.values.push(newValue);
+
+    // Performs a breadth-first traversal of cell dependency tree,
+    // pruning unchanged branches
+    const cellsToUpdate = Array.from(this.dependents);
+    const modifiedCells = new Map();
+    while (cellsToUpdate.length !== 0) {
+      const cell = cellsToUpdate.shift();
+      const snapshot = cell.value;
+      cell.update();
+      // If cell value hasn't changed, prune branch
+      if (snapshot !== cell.value) {
+        if (!modifiedCells.has(cell)) {
+          modifiedCells.set(cell, snapshot);
+          cellsToUpdate.push(...cell.dependents);
+        }
+      }
+    }
+    modifiedCells.forEach((snapshot, cell) => {
+      if (snapshot !== cell.value) {
+        cell.fireCallbacks();
       }
     });
   }
@@ -31,35 +46,39 @@ export class ComputeCell extends Cell {
   constructor(inputs, fn) {
     super(fn(inputs));
     this.inputs = inputs;
+    inputs.forEach(i => i.registerDependent(this));
     this.fn = fn;
-    inputs.forEach(i => i.dependents.add(this));
+    this.callbacks = new Set();
   }
 
-  compute() {
-    const newValue = this.fn(this.inputs);
-    if (newValue === this.value) return;
-    this.value = newValue;
-    this.update();
+  calculate() {
+    return this.fn(this.inputs);
   }
 
-  addCallback(callback) {
-    callback.dependency = this;
+  update() {
+    this.value = this.calculate();
   }
 
-  removeCallback(callback) {
-    callback.dependency = null;
+  addCallback(cb) {
+    this.callbacks.add(cb);
+  }
+
+  removeCallback(cb) {
+    this.callbacks.delete(cb);
+  }
+
+  fireCallbacks() {
+    this.callbacks.forEach(cb => cb.call(this));
   }
 }
 
 export class CallbackCell {
   constructor(fn) {
     this.fn = fn;
-    this.dependency = null;
     this.values = [];
-    callbacks.push(this);
   }
 
-  getValue() {
-    return (this.fn != null && this.dependency != null) ? this.fn(this.dependency) : null;
+  call(cell) {
+    this.values.push(this.fn(cell));
   }
 }
