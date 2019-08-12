@@ -1,12 +1,7 @@
-/* eslint-disable no-param-reassign */
-// let cellInstanceCount = 0;
-
 class Cell {
   constructor(value) {
     this.value = value;
     this.dependents = new Set();
-    // this.id = cellInstanceCount;
-    // cellInstanceCount += 1;
   }
 
   registerDependent(dependent) {
