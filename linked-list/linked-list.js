@@ -18,79 +18,72 @@ export class LinkedList {
   constructor() {
     this.head = null;
     this.tail = null;
+    this.size = 0;
+  }
+
+  insert(node) {
+    if (node.next) {
+      node.next.setPrev(node);
+    } else {
+      this.tail = node;
+    }
+    if (node.prev) {
+      node.prev.setNext(node);
+    } else {
+      this.head = node;
+    }
+    return node;
+  }
+
+  remove(node) {
+    if (!node.prev) {
+      this.head = node.next;
+    } else {
+      node.prev.setNext(node.next);
+    }
+    if (!node.next) {
+      this.tail = node.prev;
+    } else {
+      node.next.setPrev(node.prev);
+    }
+    this.size -= 1;
+    return node;
   }
 
   push(value) {
-    const newNode = new Node(value, this.tail);
-    if (this.head === null) {
-      this.head = newNode;
-    } else {
-      this.tail.setNext(newNode);
-    }
-    this.tail = newNode;
+    this.insert(new Node(value, this.tail));
+    this.size += 1;
   }
 
   pop() {
-    const { value } = this.tail;
-    if (this.tail.prev === null) {
-      this.head = null;
-      this.tail = null;
-    } else {
-      this.tail = this.tail.prev;
-      this.tail.setNext();
-    }
-    return value;
+    return this.remove(this.tail).value;
   }
 
   shift() {
-    const { value } = this.head;
-    if (this.head.next === null) {
-      this.tail = null;
-      this.head = null;
-    } else {
-      this.head = this.head.next;
-      this.head.setPrev();
-    }
-    return value;
+    return this.remove(this.head).value;
   }
 
   unshift(value) {
-    const newNode = new Node(value, null, this.head);
-    if (this.tail === null) {
-      this.tail = newNode;
-    } else {
-      this.head.setPrev(newNode);
-    }
-    this.head = newNode;
+    this.insert(new Node(value, null, this.head));
+    this.size += 1;
   }
 
   delete(value) {
-    let current = this.head;
-    while (current !== null) {
-      if (value === current.value) {
-        if (current.prev === null) {
-          this.head = current.next;
-        } else {
-          current.prev.setNext(current.next);
+    switch (value) {
+      case this.head.value: return this.shift();
+      case this.tail.value: return this.pop();
+      default:
+        for (let current = this.head; current; current = current.next) {
+          if (value === current.value) {
+            this.remove(current);
+            break;
+          }
         }
-        if (current.next === null) {
-          this.tail = current.prev;
-        } else {
-          current.next.setPrev(current.prev);
-        }
-        break;
-      }
-      current = current.next;
+        return null;
     }
   }
 
   count() {
-    let count = 0;
-    let current = this.head;
-    while (current !== null) {
-      count += 1;
-      current = current.next;
-    }
-    return count;
+    return this.size;
   }
 }
